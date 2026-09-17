@@ -22,6 +22,7 @@ from io_layer import load_file
 from profiler import get_column_types, summarize_dataframe
 from cleaning import handle_missing, convert_dtype, rename_column, delete_row, delete_column, update_cell
 from tool_registry import STAT_TOOLS, get_tool, list_tools_by_category
+from recommender import compatible_tools_for
 
 
 
@@ -82,22 +83,6 @@ Each entry declares:
 
 
 
-
-def compatible_tools_for(buckets: dict) -> list[str]:
-    """Return tools whose role contracts can be satisfied by the dataset's buckets."""
-    avail = {t: bool(cols) for t, cols in buckets.items()}
-    compat = []
-    for name, spec in STAT_TOOLS.items():
-        ok = True
-        for r in spec["roles"].values():
-            if r.get("optional"):
-                continue
-            if not any(avail.get(t, False) for t in r["types"]):
-                ok = False
-                break
-        if ok:
-            compat.append(name)
-    return compat
 # ═══════════════════════════════════════════════════════════════════════════════
 # STATS ENGINE
 # ═══════════════════════════════════════════════════════════════════════════════
