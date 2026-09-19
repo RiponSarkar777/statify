@@ -9,3 +9,5 @@ openpyxl
 xlrd
 reportlab
 pyreadstat
+lifelines
+kaleido
